@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from json import dumps
 from typing import List
+import uuid
 
 from loguru import logger
 
@@ -39,6 +40,11 @@ def pretty(obj):  # sourcery skip: instance-method-first-arg-name
     return dumps(obj, indent=2, sort_keys=True)
 
 
-def init_logger(config: List[LogSettings]):
-    logger.debug('Initializing logger with: {}', config)
-    return logger
+# Generate a new request ID, optionally including an original request ID
+def generate_request_id(original_id=''):
+    new_id = uuid.uuid4()
+
+    if original_id:
+        new_id = f"{original_id},{new_id}"
+
+    return new_id
